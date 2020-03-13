@@ -1,0 +1,13 @@
+% takes in a CSV of XYZ coordinates and writes creates quintic polynomial 
+% trajectories for the robot to follow
+
+function follow_path(file)
+    xyz_coord = csvread(file);
+    for ind = 1: size(xyz_coord,1)-1
+    quinticTrajectory(0,0.25,0,0,0,0,...
+                      xyz_coord(ind,1),xyz_coord(ind+1,1),...
+                      xyz_coord(ind,2),xyz_coord(ind+1,2),...
+                      xyz_coord(ind,3),xyz_coord(ind+1,3),...
+                      'trajectoryX.csv','trajectoryY.csv','trajectoryZ.csv');
+    end
+end
