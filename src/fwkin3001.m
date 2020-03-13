@@ -1,6 +1,8 @@
 % Performs Forward Kinematic Transformations for J2 and EOAT
 % returns position vectors for joint 2 and the end effector
 
+% takes in 3 joint angle values in rad and returns the task space position
+% of the last joint and end effector
 function [p2,p3] = fwkin3001(j0,j1,j2) 
     %DH Parameters
     a = [0, 175, 169.28]; 

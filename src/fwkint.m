@@ -1,3 +1,4 @@
+% same as fwkin3001, but returns the transformation matrices for all joints
 function [T_01,T_02,T_03] = fwkint(j0,j1,j2) 
     %DH Parameters
     a = [0, 175, 169.28]; 

@@ -3,6 +3,8 @@
 %positions (in degrees). It should output a 4x1 array containing the coefficients a i , i = 0,1,2,3 of the
 %polynomial.
 
+% csv outputs columns time,q0,v0,qf,vf
+
 function tripleCubic(t0,tf,v0,vf,q0,q0f,q1,q1f,q2,q2f,file0,file1,file2)
     cubicTrajectory(t0,tf,v0,vf,q0,q0f,file0);
     cubicTrajectory(t0,tf,v0,vf,q1,q1f,file1);
@@ -10,7 +12,7 @@ function tripleCubic(t0,tf,v0,vf,q0,q0f,q1,q1f,q2,q2f,file0,file1,file2)
 end
 
 function cubicTrajectory(t0,tf,v0,vf,q0,qf,filename)
-    rez = 15;
+    rez = 25;
     a= outputA(t0,tf,v0,vf,q0,qf);
     timeElapsed = tf-t0;
     timeInterval = timeElapsed/rez;
@@ -38,7 +40,7 @@ function a = outputA(t0,tf,v0,vf,q0,qf)
     a = invcubic * polynomial;
 end
 
-%outputs v0,q0,vf,qf
+%outputs v0,q0,qf, vf
 function b = outputB(a,t0,tf)
     cubic = [1,t0,(t0)^2,(t0)^3;
              0,1,2*t0,3*(t0)^2;

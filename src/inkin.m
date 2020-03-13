@@ -1,20 +1,21 @@
+% takes as input a 3x1 (x,y,z)mm tip position in the task space of the 
+% robot returns a set of corresponding joint angles (in RADIANS) that would 
+% put the robot’s end effector  
 
-% takes as input a 3x1 (x,y,z) tip position in the task space of the robot
-% returns a set of corresponding joint angles that would put the robot’s end effector  
-% SPITS OUT RADIANS
 function joints = inkin(xyz)
     % grab point entry
     px = xyz(1);
     py = -xyz(2);
     pz = xyz(3);
     
-    if px > 280 | px < 103 | abs(py) > (140) | pz < -45
+    if px > 280 | px < -25 | abs(py) > (250) | pz < -45
         error('Not within workspace');
     end
     
     % Link Lengths (mm)
     L = [135, 175, 169.28];
-
+    
+    % Perform IK via Geometric Approach
     d =  pz - L(1);
     h = sqrt(px^2 + py^2);
     c = sqrt(h^2 + d^2);

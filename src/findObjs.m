@@ -1,4 +1,4 @@
-function [imDetectedDisk, robotFramePose, diskDia] = findObjs(imOrig, T_checker_to_robot, T_cam_to_checker, cameraParams)
+function [ROBOTFRAMEPOSE, COLORS, DISKSIZE] = findObjs(imOrig, cameraParams)
 % FINDOBJS implements a sequence of image processing steps to detect
 % any objects of interest that may be present in an RGB image.
 %
@@ -9,31 +9,21 @@ function [imDetectedDisk, robotFramePose, diskDia] = findObjs(imOrig, T_checker_
 %
 %   Usage
 %   -----
-%   [IMDETECTEDOBJS, ROBOTFRAMEPOSE] = findObjs(IMORIG, TCHECKER2ROBOT, TCAM2CHECKER, CAMERAPARAMS)
+%   [ROBOTFRAMEPOSE,COLORS,DISKSIZE] = findObjs(IMORIG, TCHECKER2ROBOT, TCAM2CHECKER, CAMERAPARAMS)
 %
 %   Inputs
 %   ------
-%   IMORIG - an RGB image showing the robot's workspace (capture from a CAM
-%   object).
-%
-%   TCHECKER2ROBOT - the homogeneous transformation matrix between the
-%   checkered board and the reference frame at the base of the robot.
-%
-%   TCAM2CHECKER - the homogeneous transformation matrix between the camera
-%   reference frame and the checkered board (you can calculate this using
-%   the GETCAMTOCHECKERBOARD function, provided separately).
-%
 %   CAMERAPARAMS - an object containing the camera's intrinsic and
 %   extrinsic parameters, as returned by MATLAB's camera calibration app.
 %
 %   Outputs
 %   -------
-%   Ideally, this function should return:
-%   IMDETECTEDOBJS - a binarized image showing the location of the
-%   segmented objects of interest.
-%   
 %   ROBOTFRAMEPOSE - the coordinates of the objects expressed in the robot's
 %   reference frame
+%
+%   COLORINFO - color of the objects found
+%
+%   DISKINFO - size of disks found
 %
 %   Authors
 %   -------
@@ -50,16 +40,63 @@ function [imDetectedDisk, robotFramePose, diskDia] = findObjs(imOrig, T_checker_
 [im, ~] = undistortImage(imOrig, cameraParams, 'OutputView', 'full');
 
 %%  2. Segment the image to find the objects of interest.
+% Find the centroids of yellow/blue/green objects
+[blueObj,BW_b] = findColor(im, "blue");
+[yellowObj, BW_y] = findColor(im, "yellow");
+[greenObj, BW_g] = findColor(im, "green");
 
-%  [Your image processing code goes here]
+colorMatrix = [];
+objs = [];
+
+% Assign Colors Numbers only if the object is found
+% BLUE  = 1 
+% GREEN  = 2
+% YELLOW = 3
+if ~isempty(blueObj) %if the color is there
+    disp("blueObj")
+    disp(blueObj)
+    blueObj = camera2robot(cameraParams, blueObj); %convert camera to robot frame
+    objs = [objs;blueObj.']; %append to the obj list
+    colorMatrix = [colorMatrix;1]; %append to the color list
+end
+if ~isempty(greenObj)
+    disp("greenObj")
+    disp(greenObj)
+    greenObj = camera2robot(cameraParams, greenObj);
+    objs = [objs;greenObj.'];
+    colorMatrix = [colorMatrix;2];
+end
+if ~isempty(yellowObj)
+    disp("yellowObj")
+    disp(yellowObj)
+    yellowObj = camera2robot(cameraParams, yellowObj);
+    objs = [objs;yellowObj.'];
+    colorMatrix = [colorMatrix;3];
+end
+
+objsAndColor = [objs,colorMatrix]; %combine obj and color list
+% disp(objsAndColor)
+
+%%  3. Retrieve data from image.
+% sort rows from least to greatest in terms of X coord
+objList = sortrows(objsAndColor, 1, 'ascend');
+
+centroidList = objList(:,1:2);
+
+COLORS = objList(:,4);
+
+% retrieves disk sizes
+[centroidDisk, DISKSIZE] = diskSize(im, cameraParams);
+
+% show the BW_img of the detected objects
+a = imfuse(BW_b,BW_g,'blend','Scaling','joint');
+a = xor(a,0);
+b = imfuse(a,BW_y,'blend','Scaling','joint');
+hold on
+plot(objs(:,1), objs(:,2), 'b*');
+hold off
 
 % You can easily convert image pixel coordinates to 3D coordinates (expressed in the
 % checkerboard reference frame) using the following transformations:
-
-R = T_cam_to_checker(1:3,1:3);
-t = T_cam_to_checker(1:3,4);
-% worldPoints = pointsToWorld(cameraParams, R, t, YOUR_PIXEL_VALUES);
-
-% see https://www.mathworks.com/help/vision/ref/cameraparameters.pointstoworld.html
-% for details on the expected dimensions for YOUR_PIXEL_VALUES)
+ROBOTFRAMEPOSE = centroidList;
 end
