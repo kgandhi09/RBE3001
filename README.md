@@ -32,4 +32,4 @@ Team used the computer vision toolkit in MatLab to calibrate the camera using th
 https://www.youtube.com/watch?v=ANdkAOYKjz4e
 
 ## Link to the final Report:
-If interested in reading how different strategies were carried out, here's the link to the report that explains everything in detail: https://drive.google.com/drive/folders/17B6V9Ct637TgNFkdIAVQFHbPHt9tlyd-
+If interested in reading how different strategies were carried out, here's the link to the report that explains everything in detail: https://drive.google.com/file/d/1NQZ4J4zxUyeTlzhr2wb4W1P6sHYZuBAu/view?usp=sharing
