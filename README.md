@@ -1,65 +1,35 @@
-# RBE3001 Matlab Template
-This is template code for talking to the Default firmware
+# Introduction
 
-# 1. Configure git
-```bash
-git config --global user.name "John Doe"
-git config --global user.email johndoe@wpi.edu
-```
-# 2. Set up your Git Repository
-## 2.1 Clone your private lab repository
-Clone your private lab repository. **Note: The command below won't work! Use your own url, found on Github!**
-```bash
-git clone git@github.com:RBE300X-Lab/RBE3001_MatlabXX.git
-```
-If your repository is empty, you may get a warning.
+This is the final project of RBE 3001 course. The aim of this project is to build an automated robotic sorting system. The robot has to detect and localize the objects within its workspace using machine vision, pick them up by controlling the robotic arm's end effector tool, classify them based on appearance and release them within a predefined area. The team learned about various topics of robotic manipulation using a provided 3 degrees of freedom robotic manipulator. Furthermore, calculated the forward, inverse and differential kinematics of the robot for use in trajectory generation. Lastly, team implemented machine vision algorithm to sort objects by color and disk size.
 
-## 2.2 Set up your private lab repository **[DO ONLY ONCE PER TEAM]**
-Note: Perform this **only if** you do not already have the starter Matlab code in your repository
-1. `cd` into your repository you just created
-```bash
-cd [name of the repository you just cloned]
-```
-2. Set up a secondary remote server pointing to your repository
-```bash
-git remote add default-code https://github.com/WPIRoboticsEngineering/RBE3001_Matlab.git
-```
-You can confirm that the remote has been added by running the following command: 
-```bash
-git remote
-```
-3. Pull the code from your remote server. You should then see the code in your local repository
-``` bash
-git pull default-code master
-```
-4. Push your code to your main remote repository `origin`
-```bash
-git push origin
-```
+## Topics covered:
+- System Architecture and Joint Level Control
+- Forward Kinematics and Motion Planning
+- Inverse Kinematics and Task-Space Motion Planning
+- Differential Kinematics
+- Computer Vision
 
-## 2.3 Pulling changes from your secondary remote repository **[Only if required]**
-If you need to pull new changes from the default repostory, follow these instructions:
-1. Make sure you have set up the correct secondary remote repository. Run the following code to check:
-``` bash
-git remote -v
-```
-You should see `origin` (your main server repo) and another pointing to the following url:
-```url
-https://github.com/WPIRoboticsEngineering/RBE3001_Matlab.git
-```
-**If you do not see a second remote, or your second remote points to another url, follow the instructions under [Section 3.2 Part 2](##3.2-Set-up-your-private-lab-repository-**[DO-ONLY-ONCE-PER-TEAM]**)**
+## Forward Kinematics
+In order to calculate the forward kinematics for the arm, team used the Denavit-Hartenverg convention and created a table of DH parameters based on the kinematics structure of the arm.
 
-2. Run the following command to pull the new code from the secondary remote repository:
-``` bash
-git pull default-code master
-```
-Note: If your secondary remote is not named `default-code`, change it to the actual name
+## Inverse Kinematics
+Given a tip position p(x), p(y), p(z), team calculated the series of joinit angles in radians to be sent to each of the robot's joint, which was done through inkin() function. The team used a geometric approach to derive the equations drawing out values of these joint angles.
 
-# 3. Launch Matlab 
+## Trajectory Planning
+Team used two approaches for trajectory generation: Cubic polynomial technique and Quintic Polynomial technique. For the final project, the team decided to use cubic
+trajectories. While quintic trajectory planning offered many advantages, the robot’s movement was not as smooth as anticipated.
 
-Start in the directory with your checked out code.
+## Jacobian & Differential Kinematics
+jacob0 function was created to calculate the Jacobian matrix, fwvelkin function was created in order to calculate forward velocity kinematics of the robotic arms.
 
-```bash
-cd src
-matlab
-```
+## Force-Torque Relationship
+In order to calculate the Dynamic Force-Torque relationship, students applied energy-based techniques using Lagrangian method. 
+
+## Computer Vision
+Team used the computer vision toolkit in MatLab to calibrate the camera using the calibration grid, detect the objects, perform miscellanous masking to avoid detection of objects outside the workspace, and convert & communicate the position of object to the robotic arm.
+
+## Link to the Demo:
+https://www.youtube.com/watch?v=ANdkAOYKjz4e
+
+## Link to the final Report:
+If interested in reading how different strategies were carried out, here's the link to the report that explains everything in detail: https://drive.google.com/drive/folders/17B6V9Ct637TgNFkdIAVQFHbPHt9tlyd-
