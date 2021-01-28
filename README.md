@@ -13,7 +13,7 @@ This is the final project of RBE 3001 course. The aim of this project is to buil
 In order to calculate the forward kinematics for the arm, team used the Denavit-Hartenverg convention and created a table of DH parameters based on the kinematics structure of the arm.
 
 ## Inverse Kinematics
-Given a tip position p(x), p(y), p(z), team calculated the series of joinit angles in radians to be sent to each of the robot's joint, which was done through inkin() function. The team used a geometric approach to derive the equations drawing out values of these joint angles.
+Given a tip position p(x), p(y), p(z), team calculated the series of joint angles in radians to be sent to each of the robot's joint, which was done through inkin() function. The team used a geometric approach to derive the equations drawing out values of these joint angles.
 
 ## Trajectory Planning
 Team used two approaches for trajectory generation: Cubic polynomial technique and Quintic Polynomial technique. For the final project, the team decided to use cubic
